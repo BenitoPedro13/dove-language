@@ -1,36 +1,36 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# The Dove Language — Lesson Studio & design system
 
-## Getting Started
+A free tool for [The Dove Language](https://www.linkedin.com/company/the-dove-language/)
+teachers: type a lesson, get branded **slides** (16:9, for the Dove Classroom) and a **study
+handout** (A4) as PDFs. Also home of **Airmail**, Dove's brand and design system.
 
-First, run the development server:
+**Status (2026-09-29):** Airmail 0.1 proposed (not yet reviewed by Dove staff). Studio v1 works
+end to end: landing, editor with live preview, autosave, `.dove.json` import/export, slide and
+handout PDFs, living design system at `/brand`. Logo is a raster placeholder until the vector
+arrives (`docs/research.md` §6).
+
+## Quickstart
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+pnpm install
+pnpm dev          # http://localhost:3000
+pnpm typecheck && pnpm lint && pnpm build
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+No environment variables, no database: lessons live in the browser (IndexedDB) and travel as
+`.dove.json` files.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+| Route | What |
+|---|---|
+| `/` | start a lesson, open a file, try the example, your drafts |
+| `/studio?id=…` | the editor |
+| `/print/slides?id=…` · `/print/handout?id=…` | print → Save as PDF |
+| `/brand` | the design system, rendered from the real templates |
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Read first
 
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+1. `docs/research.md` — the community, the audit of the current material, open questions
+2. `docs/brand-and-design-system.md` — Airmail: colour, type, devices, templates
+3. `docs/architecture.md` — data model, pagination, storage, PDF, stack
+4. `docs/teacher-guide.md` — for teachers (share this one)
+5. `CLAUDE.md` — workflow and conventions for anyone (human or model) changing the code

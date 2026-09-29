@@ -1,44 +1,159 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
+@import "./lesson.css";
 
+/* Script fallbacks (DS §5), self-hosted, loaded per unicode-range only when used. */
+@import "@fontsource-variable/noto-sans";
+@import "@fontsource-variable/noto-sans-jp";
+@import "@fontsource-variable/noto-sans-kr";
+@import "@fontsource-variable/noto-sans-sc";
+@import "@fontsource-variable/noto-sans-arabic";
+@import "@fontsource-variable/noto-sans-hebrew";
+@import "@fontsource-variable/noto-sans-devanagari";
+@import "@fontsource-variable/noto-sans-thai";
+
+/* The studio is light only (DS §11): `dark:` classes in vendored shadcn apply only under an
+   explicit .dark ancestor, which we never set — not when the OS is in dark mode. */
 @custom-variant dark (&:is(.dark *));
+
+/*
+ * The Dove Language — tokens (docs/brand-and-design-system.md §4–5).
+ * This is the ONLY file with raw hex. Everything else reads these variables.
+ * The studio UI is light only; slides switch between Paper and Night with [data-theme].
+ */
+
+:root {
+  /* Palette (DS §4.1) */
+  --dove-paper: #fbf7ef;
+  --dove-paper-deep: #f3ede1;
+  --dove-white: #ffffff;
+  --dove-ink: #0f2140;
+  --dove-slate: #5a6478;
+  --dove-rule: #d8cfbf;
+  --dove-field: #857d6d; /* input borders: 4.08:1 on white (WCAG 1.4.11) */
+  --dove-globe: #02579e;
+  --dove-sky: #d0e4fc;
+  --dove-orange: #f47b42;
+  --dove-ember: #b4461b;
+  --dove-note: #ffe181;
+  --dove-night: #0b1630;
+  --dove-night-raised: #132344;
+  --dove-night-muted: #a9b4cc;
+  --dove-night-rule: #2a3a5e;
+  --dove-sky-night: #9cc3f5;
+
+  /* Wayfinding (DS §4.2): tint = surface, strong = text/stroke on light, bright = text on night */
+  --dove-learn-tint: var(--dove-sky);
+  --dove-learn-strong: var(--dove-globe);
+  --dove-learn-bright: var(--dove-sky-night);
+  --dove-culture-tint: var(--dove-note);
+  --dove-culture-strong: #7a5300;
+  --dove-culture-bright: var(--dove-note);
+  --dove-practice-tint: #fcdedd;
+  --dove-practice-strong: #b42330;
+  --dove-practice-bright: #ff8e92;
+  --dove-talk-tint: #d6f0df;
+  --dove-talk-strong: #1f6e43;
+  --dove-talk-bright: #7fd3a2;
+  --dove-lesson-tint: var(--dove-sky);
+  --dove-lesson-strong: var(--dove-globe);
+  --dove-lesson-bright: var(--dove-orange);
+
+  /* Type stacks (DS §5): brand faces first, then Noto per script so any language renders. */
+  --dove-scripts: "Noto Sans Variable", "Noto Sans JP Variable", "Noto Sans KR Variable",
+    "Noto Sans SC Variable", "Noto Sans Arabic Variable", "Noto Sans Hebrew Variable",
+    "Noto Sans Devanagari Variable", "Noto Sans Thai Variable", system-ui, sans-serif;
+  --font-dove-display: var(--font-bricolage), var(--dove-scripts);
+  --font-dove-text: var(--font-atkinson), var(--dove-scripts);
+  --font-dove-mono: var(--font-atkinson-mono), ui-monospace, var(--dove-scripts);
+
+  /* shadcn semantic tokens → Dove (DS §11) */
+  --background: var(--dove-paper);
+  --foreground: var(--dove-ink);
+  --card: var(--dove-white);
+  --card-foreground: var(--dove-ink);
+  --popover: var(--dove-white);
+  --popover-foreground: var(--dove-ink);
+  --primary: var(--dove-globe);
+  --primary-foreground: var(--dove-white);
+  --secondary: var(--dove-sky);
+  --secondary-foreground: var(--dove-ink);
+  --muted: var(--dove-paper-deep);
+  --muted-foreground: var(--dove-slate);
+  --accent: var(--dove-sky);
+  --accent-foreground: var(--dove-ink);
+  --destructive: var(--dove-practice-strong);
+  --border: var(--dove-rule);
+  --input: var(--dove-field);
+  --ring: var(--dove-globe);
+  --radius: 0.5rem;
+  --chart-1: var(--dove-globe);
+  --chart-2: var(--dove-orange);
+  --chart-3: var(--dove-talk-strong);
+  --chart-4: var(--dove-culture-strong);
+  --chart-5: var(--dove-practice-strong);
+  --sidebar: var(--dove-white);
+  --sidebar-foreground: var(--dove-ink);
+  --sidebar-primary: var(--dove-globe);
+  --sidebar-primary-foreground: var(--dove-white);
+  --sidebar-accent: var(--dove-sky);
+  --sidebar-accent-foreground: var(--dove-ink);
+  --sidebar-border: var(--dove-rule);
+  --sidebar-ring: var(--dove-globe);
+}
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-sans);
-  --font-mono: var(--font-geist-mono);
-  --font-heading: var(--font-sans);
-  --color-sidebar-ring: var(--sidebar-ring);
-  --color-sidebar-border: var(--sidebar-border);
-  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
-  --color-sidebar-accent: var(--sidebar-accent);
-  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
-  --color-sidebar-primary: var(--sidebar-primary);
-  --color-sidebar-foreground: var(--sidebar-foreground);
-  --color-sidebar: var(--sidebar);
-  --color-chart-5: var(--chart-5);
-  --color-chart-4: var(--chart-4);
-  --color-chart-3: var(--chart-3);
-  --color-chart-2: var(--chart-2);
-  --color-chart-1: var(--chart-1);
-  --color-ring: var(--ring);
-  --color-input: var(--input);
-  --color-border: var(--border);
-  --color-destructive: var(--destructive);
-  --color-accent-foreground: var(--accent-foreground);
-  --color-accent: var(--accent);
-  --color-muted-foreground: var(--muted-foreground);
-  --color-muted: var(--muted);
-  --color-secondary-foreground: var(--secondary-foreground);
-  --color-secondary: var(--secondary);
-  --color-primary-foreground: var(--primary-foreground);
-  --color-primary: var(--primary);
-  --color-popover-foreground: var(--popover-foreground);
-  --color-popover: var(--popover);
-  --color-card-foreground: var(--card-foreground);
   --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+
+  /* Brand colours as utilities: bg-paper, text-globe, border-rule … */
+  --color-paper: var(--dove-paper);
+  --color-paper-deep: var(--dove-paper-deep);
+  --color-ink: var(--dove-ink);
+  --color-slate: var(--dove-slate);
+  --color-rule: var(--dove-rule);
+  --color-globe: var(--dove-globe);
+  --color-sky: var(--dove-sky);
+  --color-orange: var(--dove-orange);
+  --color-ember: var(--dove-ember);
+  --color-note: var(--dove-note);
+  --color-night: var(--dove-night);
+
+  --font-sans: var(--font-dove-text);
+  --font-heading: var(--font-dove-display);
+  --font-display: var(--font-dove-display);
+  --font-mono: var(--font-dove-mono);
+
   --radius-sm: calc(var(--radius) * 0.6);
   --radius-md: calc(var(--radius) * 0.8);
   --radius-lg: var(--radius);
@@ -48,75 +163,6 @@
   --radius-4xl: calc(var(--radius) * 2.6);
 }
 
-:root {
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
-  --chart-1: oklch(0.87 0 0);
-  --chart-2: oklch(0.556 0 0);
-  --chart-3: oklch(0.439 0 0);
-  --chart-4: oklch(0.371 0 0);
-  --chart-5: oklch(0.269 0 0);
-  --radius: 0.625rem;
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
-}
-
-.dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.922 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
-  --chart-1: oklch(0.87 0 0);
-  --chart-2: oklch(0.556 0 0);
-  --chart-3: oklch(0.439 0 0);
-  --chart-4: oklch(0.371 0 0);
-  --chart-5: oklch(0.269 0 0);
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.556 0 0);
-}
-
 @layer base {
   * {
     @apply border-border outline-ring/50;
@@ -124,10 +170,31 @@
   body {
     @apply bg-background text-foreground;
   }
-  button:not(:disabled), [role="button"]:not(:disabled) {
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
     cursor: pointer;
   }
   html {
     @apply font-sans;
+  }
+  /* DS §10 / CLAUDE.md: 44 × 44 px targets. Vendored shadcn sizes are 32px; raise them here
+     instead of editing components/ui. */
+  [data-slot="button"],
+  [data-slot="select-trigger"],
+  [data-slot="toggle-group-item"],
+  [data-slot="tabs-trigger"] {
+    min-height: 2.75rem;
+  }
+  [data-slot="button"][data-size^="icon"] {
+    min-width: 2.75rem;
+  }
+  [data-slot="input"] {
+    min-height: 2.75rem;
+  }
+
+  /* DS §10: visible focus in Globe Blue, 2px with 2px offset. */
+  :focus-visible {
+    outline: 2px solid var(--dove-globe);
+    outline-offset: 2px;
   }
 }

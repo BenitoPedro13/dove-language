@@ -54,9 +54,15 @@ Lesson ──paginate()──▶ Slide[] ──<SlideView/>──▶ preview / /
    └────────────────────────────▶ <Handout/> ──▶ /print/handout
 ```
 
-`lib/lesson/paginate.ts` is a pure function: it splits blocks by the per-slide limits in DS §9,
+`lib/lesson/paginate.ts` is a pure function: it splits blocks by estimated height
+(`lib/lesson/fit.ts` — per-template height estimates in canvas px, mirroring `app/lesson.css`)
+capped by the per-slide limits in DS §9,
 numbers sections, adds "(cont.)" titles, emits the cover first, one slide per gloss language for
 dialogues, and the answer-key slide after each exercise. It is the one place those rules live.
+
+Estimates can be wrong (unusual scripts, very long words), so the studio preview measures every
+rendered `.s-body` (`hooks/use-slide-overflow.ts`) and warns the teacher. Content is never
+clipped: a clipped PDF would lose teaching material without anyone noticing.
 
 ## 3. Storage: the browser, then a file
 
@@ -127,8 +133,9 @@ Follows the global Next/React conventions (restraint first):
 | UI primitives | shadcn (`radix-nova` style, Radix base, RTL-aware classes), lucide icons | `shadcn 4.21.0`, `radix-ui 1.6.7`, `lucide-react 1.48.0` |
 | Toasts | sonner (via shadcn) | `2.0.8` |
 | Schema / import validation | zod | `4.6.5` |
+| Print | the browser; `@page` set per route | — |
 | Local storage | idb-keyval | `6.3.0` |
-| Fonts | `next/font/google`: Bricolage Grotesque, Atkinson Hyperlegible Next + Mono, Noto Sans family (lazy) | — |
+| Fonts | `next/font/google`: Bricolage Grotesque, Atkinson Hyperlegible Next + Mono. Script fallbacks: `@fontsource-variable/noto-sans{,-jp,-kr,-sc,-arabic,-hebrew,-devanagari,-thai}` imported in `globals.css` | `5.3.0` — not `next/font`: it downloads every CJK slice at build time and one failed fetch breaks the build |
 | Hosting | Vercel (static + client; no functions needed) | `[VERIFY: account/domain, R §6 Q4]` |
 | Analytics | none in v1 (no personal data leaves the browser) | — |
 
@@ -148,9 +155,11 @@ components/
   studio/                editor composites (client)
   brand/                 small pieces for /brand
 lib/
-  lesson/                schema, languages, paginate, fill-blank parser, templates, example lesson
+  lesson/                schema, languages, blocks, phrases, paginate, fit, fill-blank, issues,
+                         storage, text, example lesson
   images.ts              browser image downscale
-hooks/                   use-lesson-editor, use-autosave, use-lesson-drafts, use-print-when-ready
+hooks/                   use-lesson-editor, use-autosave, use-stored-lesson, use-lesson-drafts,
+                         use-slide-overflow, use-print-when-ready, use-download
 docs/                    research, brand-and-design-system, architecture, teacher-guide, tasks/
 ```
 

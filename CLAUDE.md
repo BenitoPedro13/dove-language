@@ -23,8 +23,8 @@ Classroom* voice channel, screen-share a slide deck, and upload the PDF to
 2. **The Lesson Studio** — a web tool where a teacher types structured lesson content and gets
    a branded 16:9 slide deck and an A4 study handout as PDFs. `docs/architecture.md`.
 
-**Status (2026-09-28):** Airmail 0.1 proposed (not yet reviewed by Dove staff); Studio v1 built
-per `docs/tasks/TASK-foundation.md`. Logo is a raster placeholder until the Dove Designer sends
+**Status (2026-09-29):** Airmail 0.1 proposed (not yet reviewed by Dove staff); Studio v1 built
+and verified per `docs/tasks/TASK-foundation.md`. Logo is a raster placeholder until the Dove Designer sends
 the vector (research §6 Q1).
 
 ### The one thing to keep in mind while building
@@ -44,7 +44,7 @@ costs teachers time has failed the brief.
 | Data | zod schema in `lib/lesson/schema.ts` is the single source of the lesson shape |
 | Storage | IndexedDB via idb-keyval (drafts) + `.dove.json` files (sharing/backup) |
 | PDF | the browser's print engine on `/print/slides` and `/print/handout` |
-| Fonts | Bricolage Grotesque (display), Atkinson Hyperlegible Next + Mono (text/meta), Noto Sans family as lazy script fallbacks |
+| Fonts | Bricolage Grotesque (display), Atkinson Hyperlegible Next + Mono (text/meta) via `next/font`; Noto per script via Fontsource (never `next/font` for CJK — see architecture §6) |
 | Hosting | Vercel (static) |
 
 ### Frontend conventions
@@ -53,14 +53,19 @@ Follow the global `~/.claude/CLAUDE.md` Frontend section as written. Project spe
 
 - **Renderers are pure.** `components/lesson/*` have no hooks and no `'use client'`, so `/brand`
   renders them on the server and the studio on the client. Keep it that way.
-- **Pagination rules live only in `lib/lesson/paginate.ts`.** A component never decides how many
-  items fit on a slide.
+- **Pagination rules live only in `lib/lesson/paginate.ts` + `lib/lesson/fit.ts`.** A component
+  never decides what fits. When you change a size in `app/lesson.css`, update the matching
+  estimate in `fit.ts` in the same commit.
+- **The studio is light only.** Keep `@custom-variant dark (&:is(.dark *))` in `globals.css`;
+  without it Tailwind applies shadcn's `dark:` classes whenever the OS is in dark mode.
 - **One `useReducer`** owns the lesson in the studio (`hooks/use-lesson-editor.ts`); the preview
   receives props. Zustand/TanStack Query are not needed until there is every-tick or server
   state — don't add them preemptively.
 - **Every text node on a slide carries `lang`** (and `dir` for RTL). Use the `<L>` helper in
   `components/lesson/lang.tsx`; never render lesson text without it.
 - **No raw hex outside `app/globals.css`.** Slides use `--dove-*` / `--k-*` variables.
+- **`next/font` options must be literal objects** — no spreads or shared constants
+  (`lib/fonts.ts`); the compiler reads them statically and fails with "Unexpected spread".
 - **Sizes on slides are `calc(N * var(--u))`** on the 1920 canvas — never px, rem or
   `transform: scale()`.
 

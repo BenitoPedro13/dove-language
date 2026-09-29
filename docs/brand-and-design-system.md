@@ -156,7 +156,7 @@ Chosen for a *learning* audience first, character second.
 | **Display** — cover title, slide titles, spotlight term | **Bricolage Grotesque** (variable, `opsz`) | friendly and a little hand-made, echoes the chunky banner type without imitating it |
 | **Text** — terms, sentences, glosses, UI | **Atkinson Hyperlegible Next** (variable) | designed by the Braille Institute so similar letters stay distinct (`I l 1`, `rn m`, `O 0`). A learner decoding an unknown word needs exactly that |
 | **Meta** — codes, levels, numbering, dates | **Atkinson Hyperlegible Mono** | same family, tabular; used for `PT-BR`, `A1–A2`, `03 / 12` |
-| **Other scripts** | **Noto Sans** (Cyrillic, Greek, Vietnamese), **Noto Sans JP / KR / SC / Arabic / Hebrew / Devanagari / Thai** | appended to every stack as fallbacks; loaded lazily by `unicode-range`, so a Latin-only lesson downloads none of them |
+| **Other scripts** | **Noto Sans** (Cyrillic, Greek, Vietnamese), **Noto Sans JP / KR / SC / Arabic / Hebrew / Devanagari / Thai** — variable, self-hosted via Fontsource | appended to every stack as fallbacks; loaded lazily by `unicode-range`, so a Latin-only lesson downloads none of them |
 
 Atkinson Hyperlegible Next and Bricolage cover Latin + Latin Extended only; the Noto fallbacks
 are what make Russian, Arabic or Japanese lessons render correctly. Never set a stack without
@@ -172,7 +172,8 @@ downscales to ~1280 px, so **nothing on a slide is smaller than 24 px**.
 |---|---|---|---|
 | `slide-display` | 136 / 1.0 | 700 | cover title, break slide |
 | `slide-title` | 64 / 1.1 | 700 | slide heading |
-| `slide-term` | 56 / 1.15 | 700 (text face) | spotlight term, abbreviation |
+| `slide-spotlight` | 120 / 1.05 | 700 | spotlight term (display face, kind colour) |
+| `slide-term` | 44 / 1.2 | 700 mono | abbreviation short form |
 | `slide-lead` | 48 / 1.3 | 500 | sentence in the target language, prompt question |
 | `slide-body` | 40 / 1.4 | 400 | vocabulary term, paragraphs, dialogue lines |
 | `slide-gloss` | 32 / 1.35 | 400 | translations/glosses (slate) |
@@ -250,16 +251,19 @@ illustration (banner, Server Guide art), not to something a student reads for 60
 
 ## 9. Templates (block → slide)
 
-Every block is data first; these are the only layouts. Pagination is automatic: a block that
-exceeds its per-slide limit continues on the next slide with "(cont.)" in the title.
+Every block is data first; these are the only layouts. Pagination is automatic and fills a slide
+by **estimated height** (`lib/lesson/fit.ts`, body budget ≈ 600 px of the 1080 canvas), capped
+by the per-slide limits below; a block that doesn't fit continues on the next slide with
+"(cont.)" in the title. The studio also measures the rendered preview and warns "Too much text
+on slide N" if an estimate was wrong — content never silently runs into the footer.
 
 | Block | Kind | Slide layout | Per-slide limit |
 |---|---|---|---|
 | **Cover** (from lesson settings) | Lesson | mark, stamp, postmark, `slide-display` title (target language) + gloss title | — |
 | **Objectives** | Lesson | topic + short paragraph, target language then glosses stacked | 1 |
 | **Section prompt** | Talk | big question in `slide-lead`, gloss below | 1 |
-| **Cultural note** | Culture | paragraph (target) left column, glosses right column (≥ 1440 px wide slide) — one language per slide if > 320 characters | 320 chars/lang |
-| **Vocabulary** | Learn | two-column list; term `slide-body` bold ink, glosses as labelled rows `EN comment` in `slide-gloss` | 8 items |
+| **Cultural note** | Culture | one column per language, side by side, when the tallest column fits; otherwise one slide per language | by height |
+| **Vocabulary** | Learn | two independent columns (CSS columns); term `slide-body` bold ink, glosses on one labelled row `EN comment  ES comentario` at 30 px | 8 items |
 | **Examples** | Learn | one sentence per row in `slide-lead`, glosses underneath, flight-path dash between rows | 3 |
 | **Spotlight** | Learn | term `slide-term`, meaning, example sentence + glosses; optional usage note in a `note` tab | 1 |
 | **Abbreviations** | Learn | three columns: short (mono) → full → meaning | 7 |
@@ -268,7 +272,7 @@ exceeds its per-slide limit continues on the next slide with "(cont.)" in the ti
 | **Break** | Practice | full-bleed kind tint, `slide-display` title, gloss below | 1 |
 | **Fill in the blank** | Practice | numbered sentences, blank drawn as a 6-char underline; word bank as outlined chips | 6 |
 | **Answer key** | Practice | auto-generated from the exercise, answers in globe bold | — |
-| **Dialogue** | Talk | speaker name in mono caps column, line in `slide-body`; each gloss language gets its own slide after the original | 12 lines |
+| **Dialogue** | Talk | speaker name in mono caps column, line at 34 px; each gloss language gets its own slides after the original, marked with a "Translation · EN" badge | 10 lines |
 | **Closing** (from lesson settings) | Lesson | "Thank you" in target + gloss, next steps (channels), postmark | — |
 
 ## 10. Accessibility (WCAG 2.2 AA, non-negotiable)
