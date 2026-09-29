@@ -52,7 +52,7 @@ export function PrintView({ format }: { format: PrintFormat }) {
         </Button>
       </div>
       {format === "slides" ? (
-        <main className="print-deck mx-auto grid max-w-[1920px] gap-6 p-6 print:gap-0 print:p-0">
+        <main className="print-deck mx-auto grid w-full max-w-[1920px] gap-6 p-6 print:gap-0 print:p-0">
           {slides.map((slide, index) => (
             <SlideView key={slide.key} lesson={lesson} slide={slide} index={index} total={slides.length} />
           ))}

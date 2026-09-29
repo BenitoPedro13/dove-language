@@ -1094,6 +1094,11 @@
   break-after: page;
 }
 
+/* No blank page after the last slide. */
+.print-deck .slide:last-child {
+  break-after: auto;
+}
+
 @media print {
   .no-print {
     display: none !important;
