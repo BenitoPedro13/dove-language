@@ -1,4 +1,5 @@
 import { SlideView } from "@/components/lesson/slide-view"
+import { SiteFooter } from "@/components/site-footer"
 import { SiteHeader } from "@/components/site-header"
 import { StartPanel } from "@/components/studio/start-panel"
 import { EXAMPLE_LESSON } from "@/lib/lesson/example"
@@ -52,6 +53,7 @@ export default function Home() {
 
         <StartPanel />
       </main>
+      <SiteFooter />
     </>
   )
 }

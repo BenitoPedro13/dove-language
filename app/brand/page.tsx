@@ -3,6 +3,7 @@ import type { ReactNode } from "react"
 
 import { Handout } from "@/components/lesson/handout"
 import { SlideView } from "@/components/lesson/slide-view"
+import { SiteFooter } from "@/components/site-footer"
 import { SiteHeader } from "@/components/site-header"
 import { readPalette } from "@/lib/brand-tokens"
 import { contrast } from "@/lib/contrast"
@@ -277,6 +278,7 @@ export default async function BrandPage() {
           </div>
         </Section>
       </main>
+      <SiteFooter />
     </>
   )
 }
